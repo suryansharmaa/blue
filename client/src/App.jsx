@@ -1,12 +1,20 @@
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { Button } from "@/components/ui/button";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Hello Tailwind + Shadcn!</h1>
-      <Button>Click me</Button>
-    </div>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </>
   );
 }
 
