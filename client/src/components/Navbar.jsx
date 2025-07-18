@@ -3,15 +3,21 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav style={{ padding: "1rem", backgroundColor: "#f0f0f0" }}>
-      <Link to="/" style={{ marginRight: "1rem" }}>
+    <nav className="p-4 bg-gray-100">
+      <Link to="/" className="mr-4">
         Home
       </Link>
-      <Link to="/login" style={{ marginRight: "1rem" }}>
+      <Link to="/login" className="mr-4">
         Login
       </Link>
-      <Link to="/register" style={{ marginRight: "1rem" }}>
+      <Link to="/register" className="mr-4">
         Register
+      </Link>
+      <Link
+        to="/create"
+        className="text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition"
+      >
+        Create Post
       </Link>
     </nav>
   );
