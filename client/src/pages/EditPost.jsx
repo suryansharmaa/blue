@@ -29,13 +29,11 @@ export default function EditPost() {
   console.log("Sending to form:", postData);
 
   return (
-    <div className="max-w-2xl mx-auto mt-12">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">Edit Post</h2>
-      <PostForm
-        onSubmit={handleSubmit}
-        initialValues={postData}
-        isEditing={true}
-      />
-    </div>
+    <PostForm
+      formTitle="Edit Post"
+      onSubmit={handleSubmit}
+      initialValues={postData}
+      isEditing={true}
+    />
   );
 }

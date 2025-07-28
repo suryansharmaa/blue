@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 export default function PostForm({ initialValues = {}, onSubmit, formTitle }) {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [author, setAuthor] = useState("");
-  const [date, setDate] = useState("");
+  const [title, setTitle] = useState(() => initialValues.title || "");
+  const [content, setContent] = useState(() => initialValues.content || "");
 
   console.log("Initial values received in PostForm:", initialValues);
 
-  useEffect(() => {
-    setTitle(initialValues.title || "");
-    setContent(initialValues.content || "");
-    setAuthor(initialValues.author || "");
-    setDate(initialValues.date || "");
-  }, [initialValues]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ title, content, author, date });
+    onSubmit({
+      title,
+      content,
+      ...(initialValues.author && { author: initialValues.author }),
+      ...(initialValues.date && { date: initialValues.date }),
+    });
   };
 
   return (
@@ -44,28 +40,6 @@ export default function PostForm({ initialValues = {}, onSubmit, formTitle }) {
             onChange={(e) => setContent(e.target.value)}
             required
           ></textarea>
-        </div>
-
-        <div>
-          <label className="block mb-1 font-medium">Author</label>
-          <input
-            type="text"
-            className="w-full border border-gray-300 rounded-lg px-4 py-2"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1 font-medium">Date</label>
-          <input
-            type="date"
-            className="w-full border border-gray-300 rounded-lg px-4 py-2"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
-          />
         </div>
 
         <button
