@@ -1,22 +1,42 @@
-import posts from "@/data/posts";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function PostDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const post = posts.find((p) => p.id === parseInt(id));
+  const [post, setPost] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/posts/${id}`)
+      .then((res) => res.json())
+      .then((data) => setPost(data))
+      .catch((err) => console.error("Error fetching post: ", err));
+  }, [id]);
 
   if (!post) return <p className="text-center text-red-500">Page not found</p>;
 
   const currentUser = "Bob"; //dummy logged in user
   const isAuthor = post.author === currentUser;
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     const confirmDelete = window.confirm("Are you sure you want to delete?");
-    if (confirmDelete) {
-      alert("Post deleted!"); //for now
-      navigate("/");
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(`${API_URL}/api/posts/${id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        alert("Post deleted successfully");
+        navigate("/");
+      } else {
+        const errorData = await res.json();
+        alert(`Delete failed: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.error("Error deleting post: ", error);
     }
   };
 
