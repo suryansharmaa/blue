@@ -4,14 +4,30 @@ import { Link } from "react-router-dom";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const API_URL = import.meta.env.VITE_API_URL;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Email: ", email);
-    console.log("Password: ", password);
+    try {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
 
-    // Will send to backend later
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Login failed");
+      alert("Logged in succesfully!");
+      console.log("User: ", data);
+    } catch (error) {
+      console.error("Login error: ", error);
+      res.status(401).json({ message: "Server error" });
+    }
   };
 
   return (

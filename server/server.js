@@ -3,14 +3,23 @@ const cors = require("cors");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const postRoutes = require("./routes/postRoutes");
+const authRoutes = require("./routes/authRoutes");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(cookieParser());
 
 // Routes
 app.use("/api/posts", postRoutes);
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello from server!");

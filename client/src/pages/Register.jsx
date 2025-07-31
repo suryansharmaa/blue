@@ -9,7 +9,9 @@ export default function Register() {
 
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -18,10 +20,28 @@ export default function Register() {
     }
     setError("");
 
-    console.log("Registering with: ", { username, email, password });
-    alert("Registered successfully!");
+    try {
+      const res = await fetch(`${API_URL}/api/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ username, email, password, confirmPassword }),
+      });
 
-    // Send to backend later
+      const data = res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Something went wrong");
+      } else {
+        alert("Registered successfully!");
+        console.log("User created: ", data);
+      }
+    } catch (error) {
+      console.error("Registration error: ", error.message);
+      setError("Server error. Please try again later.");
+    }
   };
 
   return (
