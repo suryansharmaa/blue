@@ -62,7 +62,7 @@ const updatePost = async (req, res) => {
     post.title = req.body.title || post.title;
     post.content = req.body.content || post.content;
 
-    const updatedPost = post.save();
+    const updatedPost = await post.save();
     res.json(updatedPost);
   } catch (error) {
     console.error("Error updating post: ", error.message);

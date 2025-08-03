@@ -8,6 +8,7 @@ import PostDetails from "./pages/PostDetails";
 import CreatePost from "./pages/CreatePost";
 import EditPost from "./pages/EditPost";
 import NotFound from "./pages/NotFound";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 
 function App() {
   return (
@@ -18,8 +19,22 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/posts/:id" element={<PostDetails />} />
-        <Route path="/create" element={<CreatePost />} />
-        <Route path="/edit/:id" element={<EditPost />} />
+        <Route
+          path="/create"
+          element={
+            <ProtectedRoutes>
+              <CreatePost />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/edit/:id"
+          element={
+            <ProtectedRoutes>
+              <EditPost />
+            </ProtectedRoutes>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
