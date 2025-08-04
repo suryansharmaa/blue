@@ -1,7 +1,10 @@
-import PostForm from "@/components/PostForm";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import PostForm from "@/components/PostForm";
 
 export default function CreatePost() {
+  const navigate = useNavigate();
+
   const handleSubmit = async (formData) => {
     try {
       const API_URL = import.meta.env.VITE_API_URL;
@@ -10,14 +13,22 @@ export default function CreatePost() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(formData),
       });
 
       const result = await res.json();
-      console.log("Created post: ", result);
+
+      if (!res.ok) throw new Error(result.message || "Failed to create post");
+
+      alert("Post created successfully!");
+      console.log("Created post:", result);
+      navigate("/");
     } catch (error) {
-      console.error("Error creating post: ", error);
+      console.error("Error creating post:", error.message);
+      alert("Something went wrong. Please try again.");
     }
   };
+
   return <PostForm formTitle="Create New Post" onSubmit={handleSubmit} />;
 }

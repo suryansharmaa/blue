@@ -7,6 +7,9 @@ export default function PostDetails() {
   const [post, setPost] = useState(null);
   const API_URL = import.meta.env.VITE_API_URL;
 
+  const token = localStorage.getItem("token");
+  const currentUser = localStorage.getItem("user");
+
   useEffect(() => {
     fetch(`${API_URL}/api/posts/${id}`)
       .then((res) => res.json())
@@ -14,9 +17,13 @@ export default function PostDetails() {
       .catch((err) => console.error("Error fetching post: ", err));
   }, [id]);
 
-  if (!post) return <p className="text-center text-red-500">Page not found</p>;
+  if (!post)
+    return (
+      <div className="text-center text-red-500 mt-20 text-lg font-medium">
+        Post not found
+      </div>
+    );
 
-  const currentUser = "Bob"; //dummy logged in user
   const isAuthor = post.author === currentUser;
 
   const handleDelete = async () => {
@@ -26,6 +33,9 @@ export default function PostDetails() {
     try {
       const res = await fetch(`${API_URL}/api/posts/${id}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (res.ok) {
@@ -41,39 +51,43 @@ export default function PostDetails() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-12 bg-white p-8 rounded-xl shadow">
-      <h1 className="text-3xl font-bold mb-2 text-gray-800">{post.title}</h1>
-      <p className="text-gray-500 text-sm mb-4">
-        By {post.author} • {post.date}
-      </p>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+      <div className="bg-white/80 backdrop-blur-md p-8 rounded-3xl shadow-lg border border-blue-100">
+        <h1 className="text-4xl font-bold mb-3 text-blue-800">{post.title}</h1>
+        <p className="text-gray-500 text-sm mb-6">
+          By <span className="font-medium text-gray-700">{post.author}</span> •{" "}
+          {post.date}
+        </p>
 
-      {post.image && (
-        <img
-          src={post.image}
-          alt="Post"
-          className="w-full h-72 object-cover rounded mb-6"
-        />
-      )}
-      <p className="text-lg leading-relaxed whitespace-pre-line text-gray-700">
-        {post.content}
-      </p>
+        {post.image && (
+          <img
+            src={post.image}
+            alt="Post"
+            className="w-full h-72 object-cover rounded-xl mb-8 shadow"
+          />
+        )}
 
-      {isAuthor && (
-        <div className="mt-8 flex space-x-4">
-          <button
-            onClick={() => navigate(`/edit/${id}`)}
-            className="px-4 py2 bg-blue-600 text-white rounded hover:bg-blue-700 transition cursor-pointer"
-          >
-            Edit
-          </button>
-          <button
-            onClick={handleDelete}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition cursor-pointer"
-          >
-            Delete
-          </button>
-        </div>
-      )}
+        <p className="text-lg leading-relaxed whitespace-pre-line text-gray-800 tracking-wide">
+          {post.content}
+        </p>
+
+        {isAuthor && (
+          <div className="mt-10 flex flex-wrap gap-4">
+            <button
+              onClick={() => navigate(`/edit/${id}`)}
+              className="px-6 py-2 rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition shadow-md font-medium"
+            >
+              Edit Post
+            </button>
+            <button
+              onClick={handleDelete}
+              className="px-6 py-2 rounded-xl text-red-600 border border-red-400 hover:bg-red-50 transition shadow-sm font-medium"
+            >
+              Delete Post
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
