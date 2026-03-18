@@ -29,9 +29,7 @@ export default function EditPost() {
     try {
       const res = await fetch(`${API_URL}/api/posts/${id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify(updatedData),
       });
@@ -39,19 +37,26 @@ export default function EditPost() {
       const result = await res.json();
       if (!res.ok) throw new Error(result.message || "Update failed");
 
-      alert("Post updated!");
       navigate(`/posts/${id}`);
     } catch (error) {
-      console.error("Error updating post: ", error.message);
+      console.error("Error updating post:", error.message);
       alert("Error updating post.");
     }
   };
 
   if (loading)
-    return <p className="text-center mt-10 text-blue-600">Loading post...</p>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#282a36]">
+        <div className="w-8 h-8 border-2 border-[#bd93f9] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
 
   if (error)
-    return <p className="text-center mt-10 text-red-500">Error: {error}</p>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#282a36]">
+        <p className="text-[#ff5555]">Error: {error}</p>
+      </div>
+    );
 
   return (
     <PostForm

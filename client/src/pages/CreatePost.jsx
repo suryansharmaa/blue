@@ -10,19 +10,14 @@ export default function CreatePost() {
       const API_URL = import.meta.env.VITE_API_URL;
       const res = await fetch(`${API_URL}/api/posts`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify(formData),
       });
 
       const result = await res.json();
-
       if (!res.ok) throw new Error(result.message || "Failed to create post");
 
-      alert("Post created successfully!");
-      console.log("Created post:", result);
       navigate("/");
     } catch (error) {
       console.error("Error creating post:", error.message);

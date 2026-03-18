@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 3,
       unique: true,
+      trim: true,
     },
     email: {
       type: String,
@@ -25,6 +26,32 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 6,
     },
+    role: {
+      type: String,
+      enum: ["admin", "author", "reader"],
+      default: "reader",
+    },
+    bio: {
+      type: String,
+      default: "",
+      maxlength: 500,
+    },
+    avatar: {
+      type: String,
+      default: "",
+    },
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );
